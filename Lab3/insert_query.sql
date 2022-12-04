@@ -53,6 +53,7 @@ INSERT INTO Placement_types VALUES (gen_random_uuid(), 'homestay');
 
 INSERT INTO Announcements VALUES (
 	gen_random_uuid(),
+	(SELECT id FROM Users WHERE username = 'client1'),
 	'title1',
 	'description1',
 	'address1',
@@ -63,6 +64,7 @@ INSERT INTO Announcements VALUES (
 );
 INSERT INTO Announcements VALUES (
 	gen_random_uuid(),
+	(SELECT id FROM Users WHERE username = 'client2'),
 	'title2',
 	'description2',
 	'address2',
@@ -73,6 +75,7 @@ INSERT INTO Announcements VALUES (
 );
 INSERT INTO Announcements VALUES (
 	gen_random_uuid(),
+	(SELECT id FROM Users WHERE username = 'client3'),
 	'title3',
 	'description3',
 	'address3',
@@ -83,6 +86,7 @@ INSERT INTO Announcements VALUES (
 );
 INSERT INTO Announcements VALUES (
 	gen_random_uuid(),
+	(SELECT id FROM Users WHERE username = 'client4'),
 	'title4',
 	'description4',
 	'address4',
@@ -93,6 +97,7 @@ INSERT INTO Announcements VALUES (
 );
 INSERT INTO Announcements VALUES (
 	gen_random_uuid(),
+	(SELECT id FROM Users WHERE username = 'client4'),
 	'title5',
 	'description5',
 	'address5',
@@ -100,6 +105,17 @@ INSERT INTO Announcements VALUES (
 	'2005-05-05',
 	(SELECT id FROM Placement_types WHERE placement_type = 'homestay'),
 	5
+);
+INSERT INTO Announcements VALUES (
+	gen_random_uuid(),
+	NULL,
+	'title6',
+	'description6',
+	'address6',
+	6,
+	'2006-06-06',
+	(SELECT id FROM Placement_types WHERE placement_type = 'motel'),
+	6
 );
 
 INSERT INTO Announcement_has_Facility VALUES (
@@ -215,6 +231,12 @@ INSERT INTO Announcement_log VALUES (
 	'event1',
 	(SELECT id FROM Users WHERE username = 'client1'),
 	(SELECT id FROM Announcements WHERE title = 'title1')
+);
+INSERT INTO Announcement_log VALUES (
+	gen_random_uuid(),
+	'event0',
+	(SELECT id FROM Users WHERE username = 'client1'),
+	(SELECT id FROM Announcements WHERE title = 'title5')
 );
 INSERT INTO Announcement_log VALUES (
 	gen_random_uuid(),

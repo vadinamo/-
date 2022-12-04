@@ -27,6 +27,7 @@ CREATE TABLE Placement_types (
 
 CREATE TABLE Announcements (
 	id uuid PRIMARY KEY,
+	user_id uuid REFERENCES Users(id) NOT NULL,
 	title varchar(100) NOT NULL,
 	description varchar(1000) NOT NULL,
 	address varchar(100) NOT NULL,
