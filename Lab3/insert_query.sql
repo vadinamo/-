@@ -106,17 +106,17 @@ INSERT INTO Announcements VALUES (
 	(SELECT id FROM Placement_types WHERE placement_type = 'homestay'),
 	5
 );
-INSERT INTO Announcements VALUES (
-	gen_random_uuid(),
-	NULL,
-	'title6',
-	'description6',
-	'address6',
-	6,
-	'2006-06-06',
-	(SELECT id FROM Placement_types WHERE placement_type = 'motel'),
-	6
-);
+-- INSERT INTO Announcements VALUES (
+-- 	gen_random_uuid(),
+-- 	NULL,
+-- 	'title6',
+-- 	'description6',
+-- 	'address6',
+-- 	6,
+-- 	'2006-06-06',
+-- 	(SELECT id FROM Placement_types WHERE placement_type = 'motel'),
+-- 	6
+-- );
 
 INSERT INTO Announcement_has_Facility VALUES (
 	(SELECT id FROM Announcements WHERE title = 'title1'),
@@ -166,6 +166,13 @@ INSERT INTO Reservations VALUES (
 	'2005-05-05',
 	(SELECT id FROM Users WHERE username = 'client4'),
 	(SELECT id FROM Announcements WHERE title = 'title4')
+);
+INSERT INTO Reservations VALUES (
+	gen_random_uuid(),
+	'2004-04-04',
+	'2005-05-05',
+	(SELECT id FROM Users WHERE username = 'client1'),
+	(SELECT id FROM Announcements WHERE title = 'title1')
 );
 
 INSERT INTO Reviews VALUES (

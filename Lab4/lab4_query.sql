@@ -97,4 +97,19 @@ END AS text
 FROM Announcements;
 
 -- EXPLAIN
-EXPLAIN SELECT * FROM Users
+EXPLAIN SELECT * FROM Users;
+
+SELECT Announcements.title as announcement,
+		Users.username as reserver,
+		COUNT(Reservations.id) as count
+		FROM Reservations 
+	LEFT JOIN Announcements ON Announcements.id = Reservations.announcement_id
+		LEFT JOIN Users ON Users.id = Reservations.user_id
+GROUP BY Users.id, Announcements.title;
+
+
+-- SELECT Announcements.title, Reviews.review, Reviews.rating FROM Announcements
+-- 	CROSS JOIN Reviews;
+	
+-- SELECT Announcements.title, Reviews.review, Reviews.rating FROM Announcements
+-- 	JOIN Reviews ON Reviews.announcement_id = Announcements.id;
