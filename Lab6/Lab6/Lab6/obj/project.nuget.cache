@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "0Vj0bO8Pbph2caSdpFGJNhxp5SOm6xe8n9Swf+GUvq5f39EM0Ow63yKWWkwPOGA0MtxX1Tn6IohZZo5p9kjbog==",
+  "success": true,
+  "projectFilePath": "/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Lab6.csproj",
+  "expectedPackageFiles": [
+    "/Users/vadinamo/.nuget/packages/microsoft.extensions.logging.abstractions/6.0.0/microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "/Users/vadinamo/.nuget/packages/npgsql/7.0.0/npgsql.7.0.0.nupkg.sha512",
+    "/Users/vadinamo/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -233,33 +233,4 @@ INSERT INTO Review_log VALUES (
 	(SELECT id FROM Reviews WHERE review = 'review4')
 );
 
-INSERT INTO Announcement_log VALUES (
-	gen_random_uuid(),
-	'event1',
-	(SELECT id FROM Users WHERE username = 'client1'),
-	(SELECT id FROM Announcements WHERE title = 'title1')
-);
-INSERT INTO Announcement_log VALUES (
-	gen_random_uuid(),
-	'event0',
-	(SELECT id FROM Users WHERE username = 'client1'),
-	(SELECT id FROM Announcements WHERE title = 'title5')
-);
-INSERT INTO Announcement_log VALUES (
-	gen_random_uuid(),
-	'event2',
-	(SELECT id FROM Users WHERE username = 'client2'),
-	(SELECT id FROM Announcements WHERE title = 'title2')
-);
-INSERT INTO Announcement_log VALUES (
-	gen_random_uuid(),
-	'event3',
-	(SELECT id FROM Users WHERE username = 'client3'),
-	(SELECT id FROM Announcements WHERE title = 'title3')
-);
-INSERT INTO Announcement_log VALUES (
-	gen_random_uuid(),
-	'event4',
-	(SELECT id FROM Users WHERE username = 'client4'),
-	(SELECT id FROM Announcements WHERE title = 'title4')
-);
+
