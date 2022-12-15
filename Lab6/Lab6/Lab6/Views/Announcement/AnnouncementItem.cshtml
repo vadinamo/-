@@ -1,0 +1,19 @@
+@model Lab6.Models.Announcements.AnnoucementItemModel
+
+<h1>@Model.Announcement.Title</h1>
+<p>@Model.Announcement.Id</p>
+<p>Address: @Model.Announcement.Address</p>
+<p>Room count: @Model.Announcement.RoomCount</p>
+<p>Post date: @Model.Announcement.PostDate</p>
+<p>Price per day: @Model.Announcement.PricePerDay</p>
+<p>Placement type:@Model.Announcement.PlacementType.PlacementTypeName</p>
+
+<p>Facilities:</p>
+<ul class="list-group">
+    @foreach (var facility in Model.Announcement.Facilities)
+    {
+        <li class="list-group-item">@facility.FacilityName</li>
+    }
+</ul>
+
+<p>Owner: @Model.Announcement.User.Username</p>

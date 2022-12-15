@@ -90,8 +90,8 @@
                     <div class="col">
                         <div class="card m-2 p-1 col-4" style="max-width: 250px; max-height: 440px; width: 250px; height: 440px">
                             <div class="card-body">
-                                <h5 class="card-title">@Html.DisplayFor(modelItem => announcement.Title)</h5>
-                                <p>@announcement.PlacementType.PlacementTypeName, @announcement.Address, @announcement.RoomCount</p>
+                                <a asp-controller="Announcement" asp-action="AnnouncementItem" asp-route-id="@announcement.Id"><h5 class="card-title">@Html.DisplayFor(modelItem => announcement.Title)</h5></a>
+                                <p>@announcement.PlacementType.PlacementTypeName, @announcement.Address, @announcement.RoomCount, @announcement.User.Username</p>
                             </div>
                         </div>
                     </div>
