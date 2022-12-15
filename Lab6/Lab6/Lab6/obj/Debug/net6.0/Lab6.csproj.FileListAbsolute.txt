@@ -24,3 +24,5 @@
 /Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/obj/Debug/net6.0/Lab6.pdb
 /Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/obj/Debug/net6.0/Lab6.genruntimeconfig.cache
 /Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/obj/Debug/net6.0/ref/Lab6.dll
+/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/bin/Debug/net6.0/Npgsql.dll
+/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/obj/Debug/net6.0/Lab6.csproj.CopyComplete

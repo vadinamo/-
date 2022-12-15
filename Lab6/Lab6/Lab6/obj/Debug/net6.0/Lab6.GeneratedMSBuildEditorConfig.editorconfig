@@ -15,8 +15,16 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6
 build_property._RazorSourceGeneratorDebug = 
 
-[/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/Announcements/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQW5ub3VuY2VtZW50cy9JbmRleC5jc2h0bWw=
+[/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/Admin/AnnouncementLogs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vQW5ub3VuY2VtZW50TG9ncy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/Admin/MainPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vTWFpblBhZ2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/Admin/ReviewLogs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vUmV2aWV3TG9ncy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/Home/Index.cshtml]
@@ -33,6 +41,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/User/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/User/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9SZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/vadinamo/Documents/СУБД/Lab6/Lab6/Lab6/Views/_ViewImports.cshtml]

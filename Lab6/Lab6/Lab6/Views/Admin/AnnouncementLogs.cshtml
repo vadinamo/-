@@ -1,0 +1,33 @@
+@model Lab6.Models.Admin.AnnouncementLogModel
+
+<h2>Announcement logs</h2>
+
+<table class="table">
+    <tbody>
+    <tr>
+        <th>
+            Announcement id
+        </th>
+        <th>
+            User id
+        </th>
+        <th>
+            event
+        </th>
+    </tr>
+    
+    @foreach(var log in Model.AnnouncementLogs)
+    {
+        <tr>
+            <th>
+                @log.AnnouncementId
+            </th>
+            <th>
+                @log.UserId
+            </th>
+            <th>
+                @log.Event
+            </th>
+        </tr>
+    }
+</table>

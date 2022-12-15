@@ -10,4 +10,8 @@
       <PackageReference Include="Npgsql" Version="7.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Client\Login.cshtml" />
+    </ItemGroup>
+
 </Project>

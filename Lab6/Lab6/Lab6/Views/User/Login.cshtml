@@ -1,0 +1,22 @@
+@model Lab6.Models.User.LoginModel
+
+<h1>Login</h1>
+
+<form asp-action="Login" asp-controller="User" asp-anti-forgery="true">
+    @* <div class="validation" asp-validation-summary="All"></div> *@
+    <div>
+        <div>
+            <label asp-for="Email">Email</label><br/>
+            <input asp-for="Email"/>
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div style="margin-top: 10px">
+            <label asp-for="Password">Password</label><br/>
+            <input asp-for="Password"/>
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div style="margin-top: 10px">
+            <input type="submit" value="Log In"/>
+        </div>
+    </div>
+</form>
