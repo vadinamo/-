@@ -1,0 +1,102 @@
+@model Lab6.Models.Announcements.AllAnnouncementsModel 
+
+@* <p>@Model.Announcements.Count</p> *@
+@* <table class="table"> *@
+@*     <tbody> *@
+@*     <tr> *@
+@*         <th> *@
+@*             Announcement id *@
+@*         </th> *@
+@*         <th> *@
+@*             title *@
+@*         </th> *@
+@*         <th> *@
+@*             description *@
+@*         </th> *@
+@*         <th> *@
+@*             address *@
+@*         </th> *@
+@*         <th> *@
+@*             room count *@
+@*         </th> *@
+@*         <th> *@
+@*             post date *@
+@*         </th> *@
+@*         <th> *@
+@*             price per day *@
+@*         </th> *@
+@*         <th> *@
+@*             user id *@
+@*         </th> *@
+@*         <th> *@
+@*             username *@
+@*         </th> *@
+@*         <th> *@
+@*             placement type *@
+@*         </th> *@
+@*         <th> *@
+@*             facilities *@
+@*         </th> *@
+@*     </tr> *@
+@*     @foreach (var announcement in Model.Announcements) *@
+@*     { *@
+@*         <tr> *@
+@*             <th> *@
+@*                 @announcement.Id *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.Title *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.Description *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.Address *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.RoomCount *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.PostDate *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.PricePerDay *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.User.Id *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.User.Username *@
+@*             </th> *@
+@*             <th> *@
+@*                 @announcement.PlacementType.PlacementTypeName *@
+@*             </th> *@
+@*             <th> *@
+@*                 @foreach (var facility in @announcement.Facilities) *@
+@*                 { *@
+@*                     @facility.FacilityName *@
+@*                     <br/> *@
+@*                 } *@
+@*             </th> *@
+@*         </tr> *@
+@*     } *@
+@* </table> *@
+<div class="scaffold">
+    <div class="row">
+        <div class="col-10">
+            <div class="card-group" id="list">
+                @foreach (var announcement in Model.Announcements)
+                {
+                    <div class="col">
+                        <div class="card m-2 p-1 col-4" style="max-width: 250px; max-height: 440px; width: 250px; height: 440px">
+                            <div class="card-body">
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => announcement.Title)</h5>
+                                <p>@announcement.PlacementType.PlacementTypeName, @announcement.Address, @announcement.RoomCount</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
