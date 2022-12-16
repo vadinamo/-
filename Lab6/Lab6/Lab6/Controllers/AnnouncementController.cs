@@ -28,7 +28,7 @@ public class AnnouncementController: Controller
 Announcements.room_count, Announcements.post_date, Announcements.price_per_day,
 Users.id, Users.username, Placement_types.placement_type, Facilities.facility_name 
 FROM Announcements LEFT JOIN Users ON Users.id = Announcements.user_id
-	LEFT JOIN Placement_types ON Placement_types.id = Announcements.placement_type_id
+	JOIN Placement_types ON Placement_types.id = Announcements.placement_type_id
 		LEFT JOIN Announcement_has_facility ON Announcements.id = Announcement_has_facility.announcement_id
 			LEFT JOIN Facilities ON Facilities.id = Announcement_has_facility.facility_id";
 
@@ -59,7 +59,7 @@ FROM Announcements LEFT JOIN Users ON Users.id = Announcements.user_id
                     PlacementTypeName = (string)dataReader.GetValue(9)
                 };
                 announcement.Facilities = new List<Facility>();
-                if (dataReader.GetValue(10)  != DBNull.Value)
+                if (dataReader.GetValue(10) != DBNull.Value)
                 {
                     announcement.Facilities.Add(new Facility
                     {
@@ -90,10 +90,11 @@ FROM Announcements LEFT JOIN Users ON Users.id = Announcements.user_id
             @"SELECT Announcements.id, Announcements.title, Announcements.description, Announcements.address, 
 Announcements.room_count, Announcements.post_date, Announcements.price_per_day,
 Users.id, Users.username, Placement_types.placement_type, Facilities.facility_name 
-FROM Announcements JOIN Users ON Users.id = Announcements.user_id
-	JOIN Placement_types ON Placement_types.id = Announcements.placement_type_id
-		JOIN Announcement_has_facility ON Announcements.id = Announcement_has_facility.announcement_id
-			JOIN Facilities ON Facilities.id = Announcement_has_facility.facility_id WHERE Announcements.id = (@p1)";
+FROM Announcements 
+    JOIN Users ON Users.id = Announcements.user_id
+	    JOIN Placement_types ON Placement_types.id = Announcements.placement_type_id
+		    LEFT JOIN Announcement_has_facility ON Announcements.id = Announcement_has_facility.announcement_id
+			    LEFT JOIN Facilities ON Facilities.id = Announcement_has_facility.facility_id WHERE Announcements.id = (@p1)";
         var params1 = _dbcommand.CreateParameter();
         
         params1.ParameterName = "p1";
@@ -126,10 +127,13 @@ FROM Announcements JOIN Users ON Users.id = Announcements.user_id
                     PlacementTypeName = (string)dataReader.GetValue(9)
                 };
                 announcement.Facilities = new List<Facility>();
-                announcement.Facilities.Add(new Facility
+                if (dataReader.GetValue(10) != DBNull.Value)
                 {
-                    FacilityName = (string)dataReader.GetValue(10)
-                });
+                    announcement.Facilities.Add(new Facility
+                    {
+                        FacilityName = (string)dataReader.GetValue(10)
+                    });
+                }
             }
             else
             {
@@ -299,12 +303,36 @@ FROM Reviews
 
         return placementTypes;
     }
-    
+
+    private List<Facility> GetFacilities()
+    {
+        _dbcommand.CommandText = @"SELECT * FROM Facilities";
+
+        List<Facility> facilities = new List<Facility>();
+
+        var dataReader = _dbcommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            facilities.Add(new Facility
+            {
+                Id = (Guid)dataReader.GetValue(0),
+                FacilityName = (string)dataReader.GetValue(1)
+            });
+        }
+        
+        dataReader.Close();
+
+        return facilities;
+    }
+
     [HttpGet]
     public IActionResult NewAnnouncement()
     {
         ViewData["PlacementTypes"] = new SelectList(GetPlacementTypes(), "Id", "PlacementTypeName");
-        return View();
+        return View(new NewAnnouncementModel
+        {
+            Facilities = GetFacilities()
+        });
     }
 
     [HttpPost]
@@ -312,6 +340,61 @@ FROM Reviews
     {
         if (ModelState.IsValid)
         {
+            _dbcommand.CommandText = @"CALL add_announcement(
+    (@p0),
+	(@p1),
+	(@p2),
+	(@p3),
+	(@p4),
+	(@p5),
+	(@p6),
+	(@p7)
+)";
+            var params0 = _dbcommand.CreateParameter();
+            var params1 = _dbcommand.CreateParameter();
+            var params2 = _dbcommand.CreateParameter();
+            var params3 = _dbcommand.CreateParameter();
+            var params4 = _dbcommand.CreateParameter();
+            var params5 = _dbcommand.CreateParameter();
+            var params6 = _dbcommand.CreateParameter();
+            var params7 = _dbcommand.CreateParameter();
+            
+            params0.ParameterName = "p0";
+            params0.Value = Guid.NewGuid();
+            
+            params1.ParameterName = "p1";
+            params1.Value = User.Identity.Name;
+            
+            params2.ParameterName = "p2";
+            params2.Value = model.Title;
+            
+            params3.ParameterName = "p3";
+            params3.Value = model.Description;
+            
+            params4.ParameterName = "p4";
+            params4.Value = model.Address;
+            
+            params5.ParameterName = "p5";
+            params5.Value = model.RoomCount;
+            
+            params6.ParameterName = "p6";
+            params6.Value = model.PlacementTypeId;
+            
+            params7.ParameterName = "p7";
+            params7.Value = model.PricePerDay;
+
+            _dbcommand.Parameters.Add(params0);
+            _dbcommand.Parameters.Add(params1);
+            _dbcommand.Parameters.Add(params2);
+            _dbcommand.Parameters.Add(params3);
+            _dbcommand.Parameters.Add(params4);
+            _dbcommand.Parameters.Add(params5);
+            _dbcommand.Parameters.Add(params6);
+            _dbcommand.Parameters.Add(params7);
+            
+            _dbcommand.ExecuteReader();
+            _dbcommand.Parameters.Clear();
+
             return RedirectToAction("AllAnnouncements", "Announcement");
         }
         

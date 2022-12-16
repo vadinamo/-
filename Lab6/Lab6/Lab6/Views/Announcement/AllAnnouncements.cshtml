@@ -81,9 +81,12 @@
 @*         </tr> *@
 @*     } *@
 @* </table> *@
-<a asp-controller="Announcement" asp-action="NewAnnouncement">
-    Create new
-</a>
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Announcement" asp-action="NewAnnouncement">
+        Create new
+    </a>
+}
 <div class="scaffold">
     <div class="row">
         <div class="col-10">
