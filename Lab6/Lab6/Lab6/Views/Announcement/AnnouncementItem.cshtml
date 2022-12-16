@@ -27,6 +27,11 @@
     var returnUrl = request.Path + request.QueryString.ToUriComponent();
 }
 
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Announcement" asp-action="ReservationCreating" asp-route-id="@Model.Announcement.Id">Book</a>
+}
+
 <p>Write comment</p>
 @if (User.Identity.IsAuthenticated)
 {

@@ -1,0 +1,16 @@
+@model Lab6.Models.Announcements.NewReservationModel
+
+<form asp-action="ReservationCreating" asp-controller="Announcement" asp-route-announcementId="@Model.AnnouncementId" asp-anti-forgery="true">
+    <div>
+        <label asp-for="FromDate">From date:</label><br/>
+        <input type="date" asp-for="FromDate"/>
+        <span asp-validation-for="FromDate"></span>
+        <br/>
+        <label asp-for="TillDate">Till date:</label><br/>
+        <input type="date" asp-for="TillDate"/>
+        <span asp-validation-for="TillDate"></span>
+        <div style="margin-top: 10px">
+            <input type="submit" value="Create"/>
+        </div>
+    </div>
+</form>

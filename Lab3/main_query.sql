@@ -64,13 +64,13 @@ CREATE TABLE Reviews (
 CREATE TABLE Review_log (
 	id uuid PRIMARY KEY,
 	event varchar(100) NOT NULL,
-	user_id uuid REFERENCES Users(id),
-	review_id uuid REFERENCES Reviews(id)
+	user_id uuid NOT NULL,
+	review_id uuid NOT NULL
 );
 
 CREATE TABLE Announcement_log (
 	id uuid PRIMARY KEY,
 	event varchar(100) NOT NULL,
-	user_id uuid REFERENCES Users(id),
-	announcement_id uuid REFERENCES Announcements(id)
+	user_id uuid NOT NULL,
+	announcement_id uuid NOT NULL
 );

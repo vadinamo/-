@@ -245,6 +245,7 @@ public class UserController : Controller
 
         user.Announcements = GetAnnouncements(id);
         user.Reviews = GetReviews(id);
+        user.Reservations = GetReservations(id);
 
         return new UserProfileModel
         {
@@ -301,7 +302,7 @@ public class UserController : Controller
                 Id = (Guid)dataReader.GetValue(0),
                 Rating = (int)dataReader.GetValue(1),
                 PostDate = (DateTime)dataReader.GetValue(2),
-                Announcement_id = (Guid)dataReader.GetValue(3)
+                AnnouncementId = (Guid)dataReader.GetValue(3)
             });
         }
         
@@ -309,5 +310,36 @@ public class UserController : Controller
         _dbcommand.Parameters.Clear();
         
         return reviews;
+    }
+
+    public List<Reservation> GetReservations(Guid id)
+    {
+        _dbcommand.CommandText = @"SELECT id, from_date, till_date, announcement_id FROM Reservations
+WHERE user_id = (@p1)";
+        
+        var params1 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = id;
+        
+        _dbcommand.Parameters.Add(params1);
+
+        List<Reservation> reservations = new List<Reservation>();
+        var dataReader = _dbcommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            reservations.Add(new Reservation
+            {
+                Id = (Guid)dataReader.GetValue(0),
+                FromDate = (DateTime)dataReader.GetValue(1),
+                TillDate = (DateTime)dataReader.GetValue(2),
+                AnnouncementId = (Guid)dataReader.GetValue(3)
+            });
+        }
+        
+        dataReader.Close();
+        _dbcommand.Parameters.Clear();
+        
+        return reservations;
     }
 }

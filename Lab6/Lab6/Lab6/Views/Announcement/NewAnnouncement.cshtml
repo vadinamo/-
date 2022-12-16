@@ -1,0 +1,36 @@
+@model Lab6.Models.Announcements.NewAnnouncementModel
+
+<form asp-action="NewAnnouncement" asp-controller="Announcement" asp-anti-forgery="true">
+    <div>
+        <div>
+            <label asp-for="Title">Title:</label><br/>
+            <input asp-for="Title"/>
+            <span asp-validation-for="Title"></span>
+        </div>
+        <div>
+            <label asp-for="Description">Description:</label><br/>
+            <input asp-for="Description"/>
+            <span asp-validation-for="Description"></span>
+        </div>
+        <div>
+            <label asp-for="PlacementTypeId"></label>
+            <select asp-for="PlacementTypeId" asp-items="ViewBag.PlacementTypes"></select>
+        </div>
+        <div>
+            <label asp-for="Address">Address:</label><br/>
+            <input asp-for="Address"/>
+            <span asp-validation-for="Address"></span>
+        </div>
+        <div>
+            <label asp-for="RoomCount">Room count:</label><br/>
+            <input asp-for="RoomCount"/>
+            <span asp-validation-for="RoomCount"></span>
+        </div>
+        <div>
+            <label asp-for="PricePerDay">Price per day:</label><br/>
+            <input asp-for="PricePerDay"/>
+            <span asp-validation-for="PricePerDay"></span>
+        </div>
+        <button type="submit">Create</button>
+    </div>
+</form>

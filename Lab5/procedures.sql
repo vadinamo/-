@@ -32,3 +32,29 @@ BEGIN
 								announcement_id,
 								user_id);
 END;$$;
+
+CREATE OR REPLACE PROCEDURE add_announcement(
+	user_id uuid,
+	title varchar(100),
+	description varchar(1000),
+	address varchar(100),
+	room_count int,
+	placement_type_id uuid,
+	price_per_day int
+)
+LANGUAGE PLPGSQL
+AS $$
+
+BEGIN
+	INSERT INTO Announcements VALUES (
+		gen_random_uuid(),
+		user_id,
+		title,
+		description,
+		address,
+		room_count,
+		NOW(),
+		placement_type_id,
+		price_per_day
+	);
+END;$$;

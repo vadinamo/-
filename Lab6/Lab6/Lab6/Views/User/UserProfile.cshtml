@@ -1,3 +1,4 @@
+@using Lab6.Controllers
 @model Lab6.Models.User.UserProfileModel
 
 <h1>@Model.User.Username</h1>
@@ -17,7 +18,19 @@
 <h2>Reviews</h2>
 @foreach (var review in Model.User.Reviews)
 {
-    <a asp-controller="Announcement" asp-action="AnnouncementItem" asp-route-id="@review.Announcement_id">
+    <a asp-controller="Announcement" asp-action="AnnouncementItem" asp-route-id="@review.AnnouncementId">
         @review.Rating, @review.PostDate
     </a>
+}
+
+@if (User.Identity.Name == Model.User.Email || new UserController().GetRole(User.Identity.Name) == "admin")
+{
+    <h2>Reservations</h2>
+    foreach (var reservation in Model.User.Reservations)
+    {
+        <a asp-controller="Announcement" asp-action="AnnouncementItem" asp-route-id="@reservation.AnnouncementId">
+            @reservation.FromDate - @reservation.TillDate
+        </a>
+        <br/>
+    }
 }

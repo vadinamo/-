@@ -6,6 +6,8 @@ public class User
     public string? Username { get; set; }
     public string? Email { get; set; }
     public string? RoleName { get; set; }
+    
     public List<Announcement>? Announcements { get; set; }
     public List<Review>? Reviews { get; set; }
+    public List<Reservation>? Reservations { get; set; }
 }

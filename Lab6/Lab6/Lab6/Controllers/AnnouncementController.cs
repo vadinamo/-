@@ -1,6 +1,8 @@
+using System.Data;
 using Lab6.Entities;
 using Lab6.Models.Announcements;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Npgsql;
 
 namespace Lab6.Controllers;
@@ -57,10 +59,13 @@ FROM Announcements LEFT JOIN Users ON Users.id = Announcements.user_id
                     PlacementTypeName = (string)dataReader.GetValue(9)
                 };
                 announcement.Facilities = new List<Facility>();
-                announcement.Facilities.Add(new Facility
+                if (dataReader.GetValue(10)  != DBNull.Value)
                 {
-                    FacilityName = (string)dataReader.GetValue(10)
-                });
+                    announcement.Facilities.Add(new Facility
+                    {
+                        FacilityName = (string)dataReader.GetValue(10)
+                    });
+                }
                 model.Announcements.Add(announcement);
             }
             else
@@ -85,10 +90,10 @@ FROM Announcements LEFT JOIN Users ON Users.id = Announcements.user_id
             @"SELECT Announcements.id, Announcements.title, Announcements.description, Announcements.address, 
 Announcements.room_count, Announcements.post_date, Announcements.price_per_day,
 Users.id, Users.username, Placement_types.placement_type, Facilities.facility_name 
-FROM Announcements LEFT JOIN Users ON Users.id = Announcements.user_id
-	LEFT JOIN Placement_types ON Placement_types.id = Announcements.placement_type_id
-		LEFT JOIN Announcement_has_facility ON Announcements.id = Announcement_has_facility.announcement_id
-			LEFT JOIN Facilities ON Facilities.id = Announcement_has_facility.facility_id WHERE Announcements.id = (@p1)";
+FROM Announcements JOIN Users ON Users.id = Announcements.user_id
+	JOIN Placement_types ON Placement_types.id = Announcements.placement_type_id
+		JOIN Announcement_has_facility ON Announcements.id = Announcement_has_facility.announcement_id
+			JOIN Facilities ON Facilities.id = Announcement_has_facility.facility_id WHERE Announcements.id = (@p1)";
         var params1 = _dbcommand.CreateParameter();
         
         params1.ParameterName = "p1";
@@ -217,5 +222,100 @@ FROM Reviews
         _dbcommand.Parameters.Clear();
         
         return Redirect(returnUrl);
+    }
+
+    [HttpGet]
+    public IActionResult ReservationCreating(Guid id)
+    {
+        return View(new NewReservationModel
+        {
+            AnnouncementId = id
+        });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ReservationCreating(NewReservationModel model, Guid announcementId)
+    {
+        if (ModelState.IsValid)
+        {
+            _dbcommand.CommandText = @"INSERT INTO Reservations VALUES (
+	gen_random_uuid(),
+	(@p1),
+	(@p2),
+	(SELECT id FROM Users WHERE email = (@p3)),
+	(@p4)
+)";
+            var params1 = _dbcommand.CreateParameter();
+            var params2 = _dbcommand.CreateParameter();
+            var params3 = _dbcommand.CreateParameter();
+            var params4 = _dbcommand.CreateParameter();
+            
+            params1.ParameterName = "p1";
+            params1.Value = model.FromDate;
+            
+            params2.ParameterName = "p2";
+            params2.Value = model.TillDate;
+            
+            params3.ParameterName = "p3";
+            params3.Value = User.Identity.Name;
+            
+            params4.ParameterName = "p4";
+            params4.Value = announcementId;
+        
+            _dbcommand.Parameters.Add(params1);
+            _dbcommand.Parameters.Add(params2);
+            _dbcommand.Parameters.Add(params3);
+            _dbcommand.Parameters.Add(params4);
+            
+            _dbcommand.ExecuteReader();
+            _dbcommand.Parameters.Clear();
+            
+            return RedirectToAction("AnnouncementItem", new RouteValueDictionary(new
+            {
+                controller = "Announcement", action = "AnnouncementItem", id = announcementId
+            }));
+        }
+
+        return View(model);
+    }
+
+    private List<PlacementType> GetPlacementTypes()
+    {
+        _dbcommand.CommandText = @"SELECT * FROM Placement_types";
+
+        List<PlacementType> placementTypes = new List<PlacementType>();
+
+        var dataReader = _dbcommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            placementTypes.Add(new PlacementType
+            {
+                Id = (Guid)dataReader.GetValue(0),
+                PlacementTypeName = (string)dataReader.GetValue(1)
+            });
+        }
+        
+        dataReader.Close();
+
+        return placementTypes;
+    }
+    
+    [HttpGet]
+    public IActionResult NewAnnouncement()
+    {
+        ViewData["PlacementTypes"] = new SelectList(GetPlacementTypes(), "Id", "PlacementTypeName");
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> NewAnnouncement(NewAnnouncementModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            return RedirectToAction("AllAnnouncements", "Announcement");
+        }
+        
+        ViewData["PlacementTypes"] = new SelectList(GetPlacementTypes(), "Id", "PlacementTypeName");
+        return View(model);
     }
 }

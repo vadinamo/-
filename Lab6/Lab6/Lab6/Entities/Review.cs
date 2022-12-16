@@ -8,5 +8,5 @@ public class Review
     public DateTime? PostDate { get; set; }
     
     public User? User { get; set; }
-    public Guid? Announcement_id { get; set; }
+    public Guid? AnnouncementId { get; set; }
 }
