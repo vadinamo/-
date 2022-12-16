@@ -15,15 +15,19 @@
             event
         </th>
     </tr>
-    
-    @foreach(var log in Model.ReviewLogs)
+
+    @foreach (var log in Model.ReviewLogs)
     {
         <tr>
             <th>
-                @log.ReviewId
+                <a asp-controller="Announcement" asp-action="AnnouncementItem" asp-route-id="@log.AnnouncementId">
+                    @log.ReviewId
+                </a>
             </th>
             <th>
-                @log.UserId
+                <a asp-controller="User" asp-action="UserProfile" asp-route-id="@log.UserId">
+                    @log.UserId
+                </a>
             </th>
             <th>
                 @log.Event

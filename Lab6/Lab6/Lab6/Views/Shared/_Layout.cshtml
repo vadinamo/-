@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="~/Lab6.styles.css" asp-append-version="true"/>
 </head>
 <body>
+@{
+    Guid UserId = Guid.Empty;
+    if (User.Identity.IsAuthenticated)
+    {
+        UserId = new UserController().GetIdFromEmail(User.Identity.Name);
+    }
+}
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container-fluid">
@@ -43,7 +50,7 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Profile</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="UserProfile" asp-route-id="@UserId">Profile</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Reservations</a>

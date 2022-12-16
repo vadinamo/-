@@ -53,7 +53,9 @@ public class AdminController: Controller
 
     public ReviewLogModel GetReviewLogs()
     {
-        _dbcommand.CommandText = @"SELECT review_id, user_id, event FROM Review_log";
+        _dbcommand.CommandText = @"SELECT Review_log.review_id, Review_log.user_id, Review_log.event, Reviews.announcement_id 
+FROM Review_log
+LEFT JOIN Reviews ON Reviews.id = Review_log.review_id";
 
         var model = new ReviewLogModel();
         model.ReviewLogs = new List<ReviewLog>();
@@ -65,6 +67,7 @@ public class AdminController: Controller
             temp.ReviewId = (Guid)dataReader.GetValue(0);
             temp.UserId = (Guid)dataReader.GetValue(1);
             temp.Event = (string)dataReader.GetValue(2);
+            temp.AnnouncementId = (Guid)dataReader.GetValue(3);
             
             model.ReviewLogs.Add(temp);
         }

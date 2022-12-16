@@ -51,7 +51,9 @@ else
 @foreach (var review in Model.Announcement.Reviews)
 {
     <hr>
-    <h3>@review.User.Username</h3>
+    <a asp-controller="User" asp-action="UserProfile" asp-route-id="@review.User.Id">
+        <h3>@review.User.Username</h3>
+    </a>
     <p>@review.Rating</p>
     <p>@review.Comment</p>
     <hr>

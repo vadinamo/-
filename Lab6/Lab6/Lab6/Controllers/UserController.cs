@@ -188,4 +188,126 @@ public class UserController : Controller
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("Index", "Home");
     }
+
+    public Guid GetIdFromEmail(string email)
+    {
+        _dbcommand.CommandText = @"SELECT id FROM Users WHERE email = (@p1)";
+        
+        var params1 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = email;
+        _dbcommand.Parameters.Add(params1);
+        
+        var dataReader = _dbcommand.ExecuteReader();
+        var id = Guid.Empty;
+
+        while (dataReader.Read())
+        {
+            id = (Guid)dataReader.GetValue(0);
+        }
+
+        _dbcommand.Parameters.Clear();
+        dataReader.Close();
+        
+        return id;
+    }
+    
+    public IActionResult UserProfile(Guid id)
+    {
+        return View(GetUser(id));
+    }
+    
+    public UserProfileModel GetUser(Guid id)
+    {
+        _dbcommand.CommandText = @"SELECT Users.id, Users.username, Users.email, Roles.role_name FROM Users 
+	JOIN Roles ON Roles.id = Users.role_id 
+	WHERE Users.id = (@p1)";
+        var params1 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = id;
+        
+        _dbcommand.Parameters.Add(params1);
+
+        var user = new User();
+        var dataReader = _dbcommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            user.Id = (Guid)dataReader.GetValue(0);
+            user.Username = (string)dataReader.GetValue(1);
+            user.Email = (string)dataReader.GetValue(2);
+            user.RoleName = (string)dataReader.GetValue(3);
+        }
+        
+        dataReader.Close();
+        _dbcommand.Parameters.Clear();
+
+        user.Announcements = GetAnnouncements(id);
+        user.Reviews = GetReviews(id);
+
+        return new UserProfileModel
+        {
+            User = user
+        };
+    }
+
+    public List<Announcement> GetAnnouncements(Guid id)
+    {
+        _dbcommand.CommandText = @"SELECT id, title, address FROM Announcements
+	WHERE Announcements.user_id = (@p1)";
+        var params1 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = id;
+        
+        _dbcommand.Parameters.Add(params1);
+
+        List<Announcement> announcements = new List<Announcement>();
+        var dataReader = _dbcommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            announcements.Add(new Announcement
+            {
+                Id = (Guid)dataReader.GetValue(0),
+                Title = (string)dataReader.GetValue(1),
+                Address = (string)dataReader.GetValue(2)
+            });
+        }
+        
+        dataReader.Close();
+        _dbcommand.Parameters.Clear();
+
+        return announcements;
+    }
+
+    public List<Review> GetReviews(Guid id)
+    {
+        _dbcommand.CommandText = @"SELECT id, rating, post_date, announcement_id FROM Reviews
+	WHERE Reviews.user_id = (@p1)";
+        var params1 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = id;
+        
+        _dbcommand.Parameters.Add(params1);
+
+        List<Review> reviews = new List<Review>();
+        var dataReader = _dbcommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            reviews.Add(new Review
+            {
+                Id = (Guid)dataReader.GetValue(0),
+                Rating = (int)dataReader.GetValue(1),
+                PostDate = (DateTime)dataReader.GetValue(2),
+                Announcement_id = (Guid)dataReader.GetValue(3)
+            });
+        }
+        
+        dataReader.Close();
+        _dbcommand.Parameters.Clear();
+        
+        return reviews;
+    }
 }

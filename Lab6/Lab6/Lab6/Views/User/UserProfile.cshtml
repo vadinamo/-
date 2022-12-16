@@ -1,0 +1,23 @@
+@model Lab6.Models.User.UserProfileModel
+
+<h1>@Model.User.Username</h1>
+<p>Email: @Model.User.Email</p>
+<p>Role: @Model.User.RoleName</p>
+
+<hr>
+<h2>Announcements:</h2>
+@foreach (var announcement in Model.User.Announcements)
+{
+    <a asp-controller="Announcement" asp-action="AnnouncementItem" asp-route-id="@announcement.Id">
+        @announcement.Title, @announcement.Address
+    </a>
+}
+
+<hr>
+<h2>Reviews</h2>
+@foreach (var review in Model.User.Reviews)
+{
+    <a asp-controller="Announcement" asp-action="AnnouncementItem" asp-route-id="@review.Announcement_id">
+        @review.Rating, @review.PostDate
+    </a>
+}

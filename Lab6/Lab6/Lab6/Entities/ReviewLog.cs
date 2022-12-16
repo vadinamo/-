@@ -6,5 +6,6 @@ public class ReviewLog
     public string? Event { get; set; }
     
     public Guid? UserId { get; set; }
+    public Guid? AnnouncementId { get; set; }
     public Guid? ReviewId { get; set; }
 }

@@ -20,10 +20,14 @@
     {
         <tr>
             <th>
-                @log.AnnouncementId
+                <a asp-controller="Announcement" asp-action="AnnouncementItem" asp-route-id="@log.AnnouncementId">
+                    @log.AnnouncementId
+                </a>
             </th>
             <th>
-                @log.UserId
+                <a asp-controller="User" asp-action="UserProfile" asp-route-id="@log.UserId">
+                    @log.UserId
+                </a>
             </th>
             <th>
                 @log.Event
