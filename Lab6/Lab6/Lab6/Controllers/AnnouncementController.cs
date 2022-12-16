@@ -358,9 +358,11 @@ FROM Reviews
             var params5 = _dbcommand.CreateParameter();
             var params6 = _dbcommand.CreateParameter();
             var params7 = _dbcommand.CreateParameter();
+
+            var id = Guid.NewGuid();
             
             params0.ParameterName = "p0";
-            params0.Value = Guid.NewGuid();
+            params0.Value = id;
             
             params1.ParameterName = "p1";
             params1.Value = User.Identity.Name;
@@ -400,5 +402,27 @@ FROM Reviews
         
         ViewData["PlacementTypes"] = new SelectList(GetPlacementTypes(), "Id", "PlacementTypeName");
         return View(model);
+    }
+
+    public void AddFacilities(Guid announcementId, Guid? facilityId)
+    {
+        _dbcommand.CommandText = @"INSERT INTO Announcement_has_Facility VALUES (
+	(@p1),
+	(@p2)
+)";
+        var params1 = _dbcommand.CreateParameter();
+        var params2 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = announcementId;
+            
+        params2.ParameterName = "p2";
+        params2.Value = facilityId;
+        
+        _dbcommand.Parameters.Add(params1);
+        _dbcommand.Parameters.Add(params2);
+
+        _dbcommand.ExecuteReader();
+        _dbcommand.Parameters.Clear();
     }
 }

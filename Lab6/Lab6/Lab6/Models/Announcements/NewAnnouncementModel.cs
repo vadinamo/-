@@ -29,6 +29,12 @@ public class NewAnnouncementModel
     [Display(Name = "Price per day")]
     public int PricePerDay { get; set; }
     
+    
+    
+    
+    
+    
+    
     [Display(Name = "Facilities")]
     public List<Facility>? Facilities { get; set; }
 }
