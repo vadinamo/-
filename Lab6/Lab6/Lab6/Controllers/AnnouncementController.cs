@@ -132,8 +132,90 @@ FROM Announcements LEFT JOIN Users ON Users.id = Announcements.user_id
             }
         }
 
-        model.Announcement = announcement;
         dataReader.Close();
+        _dbcommand.Parameters.Clear();
+        
+        announcement.Reviews = GetReviews(id);
+        model.Announcement = announcement;
         return model;
+    }
+
+    public List<Review> GetReviews(Guid id)
+    {
+        _dbcommand.CommandText = @"SELECT Reviews.id, Reviews.rating, Reviews.review, Reviews.post_date, Reviews.user_id, Users.username
+FROM Reviews 
+	LEFT JOIN Users on Users.id = Reviews.user_id
+	WHERE announcement_id = (@p1)";
+        
+        var params1 = _dbcommand.CreateParameter();
+        params1.ParameterName = "p1";
+        params1.Value = id;
+        
+        _dbcommand.Parameters.Add(params1);
+        
+        var reviews = new List<Review>();
+        var dataReader = _dbcommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            reviews.Add(new Review
+                {
+                    Id = (Guid)dataReader.GetValue(0),
+                    Rating = (int)dataReader.GetValue(1),
+                    Comment = (string)dataReader.GetValue(2),
+                    PostDate = (DateTime)dataReader.GetValue(3),
+                    User = new User
+                    {
+                        Id = (Guid)dataReader.GetValue(4),
+                        Username = (string)dataReader.GetValue(5)
+                    }
+                }
+            );
+        }
+        
+        dataReader.Close();
+        _dbcommand.Parameters.Clear();
+        return reviews;
+    }
+
+    public async Task<IActionResult> PostReview(Guid id, AnnoucementItemModel model, string returnUrl)
+    {
+        _dbcommand.CommandText = @"INSERT INTO Reviews VALUES (
+	gen_random_uuid(),
+	(@p1),
+	(@p2),
+	(@p3),
+	(@p4),
+	(SELECT id FROM Users WHERE email = (@p5)));";
+        var params1 = _dbcommand.CreateParameter();
+        var params2 = _dbcommand.CreateParameter();
+        var params3 = _dbcommand.CreateParameter();
+        var params4 = _dbcommand.CreateParameter();
+        var params5 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = model.Rating;
+        
+        params2.ParameterName = "p2";
+        params2.Value = model.Comment;
+        
+        params3.ParameterName = "p3";
+        params3.Value = DateTime.Now;
+        
+        params4.ParameterName = "p4";
+        params4.Value = id;
+        
+        params5.ParameterName = "p5";
+        params5.Value = User.Identity.Name;
+        
+        _dbcommand.Parameters.Add(params1);
+        _dbcommand.Parameters.Add(params2);
+        _dbcommand.Parameters.Add(params3);
+        _dbcommand.Parameters.Add(params4);
+        _dbcommand.Parameters.Add(params5);
+        
+        _dbcommand.ExecuteReader();
+        _dbcommand.Parameters.Clear();
+        
+        return Redirect(returnUrl);
     }
 }

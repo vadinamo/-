@@ -14,4 +14,6 @@ public class Announcement
     public List<Facility>? Facilities { get; set; }
     public PlacementType? PlacementType { get; set; }
     public int? PricePerDay { get; set; }
+
+    public List<Review>? Reviews { get; set; }
 }

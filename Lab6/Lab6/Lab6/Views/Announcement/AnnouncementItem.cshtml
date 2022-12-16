@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Lab6.Models.Announcements.AnnoucementItemModel
 
 <h1>@Model.Announcement.Title</h1>
@@ -7,6 +8,7 @@
 <p>Post date: @Model.Announcement.PostDate</p>
 <p>Price per day: @Model.Announcement.PricePerDay</p>
 <p>Placement type:@Model.Announcement.PlacementType.PlacementTypeName</p>
+<p>@User.Identity.Name</p>
 
 <p>Facilities:</p>
 <ul class="list-group">
@@ -17,3 +19,40 @@
 </ul>
 
 <p>Owner: @Model.Announcement.User.Username</p>
+
+<br/>
+
+@{
+    var request = ViewContext.HttpContext.Request;
+    var returnUrl = request.Path + request.QueryString.ToUriComponent();
+}
+
+<p>Write comment</p>
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-action="PostReview" asp-controller="Announcement"
+          asp-route-returnUrl="@returnUrl" asp-route-id="@Model.Announcement.Id">
+        <label asp-for="Comment">Comment</label><br/>
+        <input asp-for="Comment"/>
+        <span asp-validation-for="Comment"></span>
+        
+        <label asp-for="Rating">Rating</label><br/>
+        <input asp-for="Rating"/>
+        <span asp-validation-for="Rating"></span>
+        
+        <button type="submit">Post</button>
+    </form>
+}
+else
+{
+    <a asp-controller="User" asp-action="Login">Login</a>
+}
+
+@foreach (var review in Model.Announcement.Reviews)
+{
+    <hr>
+    <h3>@review.User.Username</h3>
+    <p>@review.Rating</p>
+    <p>@review.Comment</p>
+    <hr>
+}

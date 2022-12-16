@@ -7,6 +7,5 @@ public class Review
     public string? Comment { get; set; }
     public DateTime? PostDate { get; set; }
     
-    public Guid? AnnouncementId { get; set; }
-    public Guid? UserId { get; set; }
+    public User? User { get; set; }
 }
