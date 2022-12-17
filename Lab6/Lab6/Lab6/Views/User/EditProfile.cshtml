@@ -1,0 +1,27 @@
+@model Lab6.Models.User.EditProfileModel
+
+<h1>Edit profile</h1>
+
+<form asp-action="EditProfile" asp-controller="User" asp-anti-forgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div>
+            <label asp-for="Username">Username</label><br/>
+            <input asp-for="Username"/>
+            <span asp-validation-for="Username"></span>
+        </div>
+        <div style="margin-top: 10px">
+            <label asp-for="Password">Password</label><br/>
+            <input asp-for="Password"/>
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div style="margin-top: 10px">
+            <label asp-for="ConfirmPassword">Confirm Password</label><br/>
+            <input asp-for="ConfirmPassword"/>
+            <span asp-validation-for="ConfirmPassword"></span>
+        </div>
+        <div style="margin-top: 10px">
+            <input type="submit" value="Edit"/>
+        </div>
+    </div>
+</form>

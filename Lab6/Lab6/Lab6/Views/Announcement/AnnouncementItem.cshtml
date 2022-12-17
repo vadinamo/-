@@ -8,7 +8,6 @@
 <p>Post date: @Model.Announcement.PostDate</p>
 <p>Price per day: @Model.Announcement.PricePerDay</p>
 <p>Placement type:@Model.Announcement.PlacementType.PlacementTypeName</p>
-<p>@User.Identity.Name</p>
 
 <p>Facilities:</p>
 <ul class="list-group">
@@ -18,7 +17,12 @@
     }
 </ul>
 
-<p>Owner: @Model.Announcement.User.Username</p>
+<p>
+    Owner:
+    <a asp-controller="User" asp-action="UserProfile" asp-route-id="@Model.Announcement.User.Id">
+        @Model.Announcement.User.Username
+    </a>
+</p>
 
 <br/>
 
@@ -40,11 +44,11 @@
         <label asp-for="Comment">Comment</label><br/>
         <input asp-for="Comment"/>
         <span asp-validation-for="Comment"></span>
-        
+
         <label asp-for="Rating">Rating</label><br/>
         <input asp-for="Rating"/>
         <span asp-validation-for="Rating"></span>
-        
+
         <button type="submit">Post</button>
     </form>
 }

@@ -342,4 +342,70 @@ WHERE user_id = (@p1)";
         
         return reservations;
     }
+
+    [HttpGet]
+    public IActionResult EditProfile()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditProfile(EditProfileModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            _dbcommand.CommandText = @"SELECT username, password FROM Users WHERE email = (@p1)";
+            
+            var params1 = _dbcommand.CreateParameter();
+        
+            params1.ParameterName = "p1";
+            params1.Value = User.Identity.Name;
+        
+            _dbcommand.Parameters.Add(params1);
+
+            var user = new User();
+            var dataReader = _dbcommand.ExecuteReader();
+            while (dataReader.Read())
+            {
+                user.Username = (string)dataReader.GetValue(0);
+                user.Password = (string)dataReader.GetValue(1);
+            }
+            
+            _dbcommand.Parameters.Clear();
+            dataReader.Close();
+            
+            user.Username = model.Username ?? user.Username;
+            user.Password = model.Password ?? user.Password;
+            
+            UpdateUser(user);
+
+            return RedirectToAction("AllAnnouncements", "Announcement");
+        }
+        return View(model);
+    }
+
+    private void UpdateUser(User user)
+    {
+        _dbcommand.CommandText = @"UPDATE Users SET username = (@p1), password = (@p2) WHERE email = (@p3)";
+        
+        var params1 = _dbcommand.CreateParameter();
+        var params2 = _dbcommand.CreateParameter();
+        var params3 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = user.Username;
+        
+        params2.ParameterName = "p2";
+        params2.Value = user.Password;
+        
+        params3.ParameterName = "p3";
+        params3.Value = User.Identity.Name;
+        
+        _dbcommand.Parameters.Add(params1);
+        _dbcommand.Parameters.Add(params2);
+        _dbcommand.Parameters.Add(params3);
+        
+        _dbcommand.ExecuteReader();
+        _dbcommand.Parameters.Clear();
+    }
 }

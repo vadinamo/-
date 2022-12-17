@@ -1,7 +1,12 @@
 @using Lab6.Controllers
 @model Lab6.Models.User.UserProfileModel
 
+
 <h1>@Model.User.Username</h1>
+@if (User.Identity.Name == Model.User.Email)
+{
+    <a asp-controller="User" asp-action="EditProfile">Edit profile</a>
+}
 <p>Email: @Model.User.Email</p>
 <p>Role: @Model.User.RoleName</p>
 
