@@ -495,4 +495,21 @@ FROM Reviews
         _dbcommand.ExecuteReader();
         _dbcommand.Parameters.Clear();
     }
+
+    public async Task<IActionResult> DeleteReview(Guid id, string returnUrl)
+    {
+        _dbcommand.CommandText = @"DELETE FROM Reviews WHERE id = (@p1)";
+        
+        var params1 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = id;
+        
+        _dbcommand.Parameters.Add(params1);
+        
+        _dbcommand.ExecuteReader();
+        _dbcommand.Parameters.Clear();
+        
+        return Redirect(returnUrl);
+    }
 }

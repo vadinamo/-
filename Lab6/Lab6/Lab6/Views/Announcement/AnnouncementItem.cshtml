@@ -67,9 +67,14 @@ else
     if (new UserController().GetIdFromEmail(User.Identity.Name) == review.User.Id ||
         new UserController().GetRole(User.Identity.Name) == "admin")
     {
-        <a asp-controller="Announcement" asp-action="EditComment" asp-route-id="@review.Id">
-            Edit
-        </a>
+        <div class="container">
+            <a asp-controller="Announcement" asp-action="DeleteReview" asp-route-id="@review.Id" asp-route-returnUrl="@returnUrl">
+                Delete
+            </a>
+            <a asp-controller="Announcement" asp-action="EditComment" asp-route-id="@review.Id">
+                Edit
+            </a>
+        </div>
     }
     <p>@review.Rating</p>
     <p>@review.Comment</p>
