@@ -425,4 +425,74 @@ FROM Reviews
         _dbcommand.ExecuteReader();
         _dbcommand.Parameters.Clear();
     }
+
+    [HttpGet]
+    public IActionResult EditComment(Guid id)
+    {
+        return View(new EditReviewModel
+        {
+            Id = id
+        });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditComment(EditReviewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            _dbcommand.CommandText = @"SELECT review, rating FROM Reviews WHERE id = (@p1)";
+            
+            var params1 = _dbcommand.CreateParameter();
+            
+            params1.ParameterName = "p1";
+            params1.Value = model.Id;
+            _dbcommand.Parameters.Add(params1);
+
+            var review = new Review();
+            var dataReader = _dbcommand.ExecuteReader();
+            while (dataReader.Read())
+            {
+                review.Comment = (string)dataReader.GetValue(0);
+                review.Rating = (int)dataReader.GetValue(1);
+            }
+            
+            _dbcommand.Parameters.Clear();
+            dataReader.Close();
+            
+            review.Comment = model.Comment ?? review.Comment;
+            review.Rating = model.Rating == 0 ? review.Rating : model.Rating;
+            review.Id = model.Id;
+            
+            UpdateReview(review);
+            
+            return RedirectToAction("AllAnnouncements", "Announcement");
+        }
+
+        return View(model);
+    }
+
+    private void UpdateReview(Review review)
+    {
+        _dbcommand.CommandText = @"UPDATE Reviews SET review = (@p1), rating = (@p2) WHERE id = (@p3)";
+        
+        var params1 = _dbcommand.CreateParameter();
+        var params2 = _dbcommand.CreateParameter();
+        var params3 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = review.Comment;
+        
+        params2.ParameterName = "p2";
+        params2.Value = review.Rating;
+        
+        params3.ParameterName = "p3";
+        params3.Value = review.Id;
+        
+        _dbcommand.Parameters.Add(params1);
+        _dbcommand.Parameters.Add(params2);
+        _dbcommand.Parameters.Add(params3);
+        
+        _dbcommand.ExecuteReader();
+        _dbcommand.Parameters.Clear();
+    }
 }

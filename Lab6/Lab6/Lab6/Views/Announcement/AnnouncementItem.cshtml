@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Lab6.Controllers
 @model Lab6.Models.Announcements.AnnoucementItemModel
 
 <h1>@Model.Announcement.Title</h1>
@@ -63,6 +64,13 @@ else
     <a asp-controller="User" asp-action="UserProfile" asp-route-id="@review.User.Id">
         <h3>@review.User.Username</h3>
     </a>
+    if (new UserController().GetIdFromEmail(User.Identity.Name) == review.User.Id ||
+        new UserController().GetRole(User.Identity.Name) == "admin")
+    {
+        <a asp-controller="Announcement" asp-action="EditComment" asp-route-id="@review.Id">
+            Edit
+        </a>
+    }
     <p>@review.Rating</p>
     <p>@review.Comment</p>
     <hr>

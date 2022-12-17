@@ -1,0 +1,13 @@
+@model Lab6.Models.Announcements.EditReviewModel
+
+<form asp-controller="Announcement" asp-action="EditComment">
+    <label asp-for="Comment">Comment</label><br/>
+    <input asp-for="Comment"/>
+    <span asp-validation-for="Comment"></span>
+
+    <label asp-for="Rating">Rating</label><br/>
+    <input asp-for="Rating"/>
+    <span asp-validation-for="Rating"></span>
+    
+    <button type="submit">Edit</button>
+</form>
