@@ -512,4 +512,21 @@ FROM Reviews
         
         return Redirect(returnUrl);
     }
+
+    public async Task<IActionResult> DeleteAnnouncement(Guid id)
+    {
+        _dbcommand.CommandText = @"DELETE FROM Announcements WHERE id = (@p1)";
+        
+        var params1 = _dbcommand.CreateParameter();
+        
+        params1.ParameterName = "p1";
+        params1.Value = id;
+        
+        _dbcommand.Parameters.Add(params1);
+        
+        _dbcommand.ExecuteReader();
+        _dbcommand.Parameters.Clear();
+        
+        return RedirectToAction("AllAnnouncements");
+    }
 }

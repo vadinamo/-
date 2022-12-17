@@ -3,6 +3,16 @@
 @model Lab6.Models.Announcements.AnnoucementItemModel
 
 <h1>@Model.Announcement.Title</h1>
+
+@if (User.Identity.IsAuthenticated &&
+     (new UserController().GetIdFromEmail(User.Identity.Name) == Model.Announcement.User.Id ||
+      new UserController().GetRole(User.Identity.Name) == "admin"))
+{
+    <a asp-controller="Announcement" asp-action="DeleteAnnouncement" asp-route-id="@Model.Announcement.Id">
+        Delete
+    </a>
+}
+
 <p>@Model.Announcement.Id</p>
 <p>Address: @Model.Announcement.Address</p>
 <p>Room count: @Model.Announcement.RoomCount</p>
@@ -64,8 +74,9 @@ else
     <a asp-controller="User" asp-action="UserProfile" asp-route-id="@review.User.Id">
         <h3>@review.User.Username</h3>
     </a>
-    if (new UserController().GetIdFromEmail(User.Identity.Name) == review.User.Id ||
-        new UserController().GetRole(User.Identity.Name) == "admin")
+    if (User.Identity.IsAuthenticated &&
+        (new UserController().GetIdFromEmail(User.Identity.Name) == review.User.Id ||
+         new UserController().GetRole(User.Identity.Name) == "admin"))
     {
         <div class="container">
             <a asp-controller="Announcement" asp-action="DeleteReview" asp-route-id="@review.Id" asp-route-returnUrl="@returnUrl">
