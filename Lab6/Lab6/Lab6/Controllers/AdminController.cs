@@ -67,7 +67,14 @@ LEFT JOIN Reviews ON Reviews.id = Review_log.review_id";
             temp.ReviewId = (Guid)dataReader.GetValue(0);
             temp.UserId = (Guid)dataReader.GetValue(1);
             temp.Event = (string)dataReader.GetValue(2);
-            temp.AnnouncementId = (Guid)dataReader.GetValue(3);
+            if (!dataReader.IsDBNull(3))
+            {
+                temp.AnnouncementId = (Guid)dataReader.GetValue(3);
+            }
+            else
+            {
+                temp.AnnouncementId = Guid.NewGuid();
+            }
             
             model.ReviewLogs.Add(temp);
         }

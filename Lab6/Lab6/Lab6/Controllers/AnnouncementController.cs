@@ -80,7 +80,6 @@ FROM Announcements LEFT JOIN Users ON Users.id = Announcements.user_id
     
     public IActionResult AnnouncementItem(Guid id)
     {
-        
         return View(GetAnnouncement(id));
     }
 
@@ -106,6 +105,7 @@ FROM Announcements
         
         var model = new AnnoucementItemModel();
         var announcement = new Announcement();
+
         while (dataReader.Read())
         {
             if ((Guid)dataReader.GetValue(0) != announcement.Id)

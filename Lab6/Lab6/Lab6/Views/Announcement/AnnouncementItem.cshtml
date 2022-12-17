@@ -2,92 +2,99 @@
 @using Lab6.Controllers
 @model Lab6.Models.Announcements.AnnoucementItemModel
 
-<h1>@Model.Announcement.Title</h1>
-
-@if (User.Identity.IsAuthenticated &&
-     (new UserController().GetIdFromEmail(User.Identity.Name) == Model.Announcement.User.Id ||
-      new UserController().GetRole(User.Identity.Name) == "admin"))
-{
-    <a asp-controller="Announcement" asp-action="DeleteAnnouncement" asp-route-id="@Model.Announcement.Id">
-        Delete
-    </a>
-}
-
-<p>@Model.Announcement.Id</p>
-<p>Address: @Model.Announcement.Address</p>
-<p>Room count: @Model.Announcement.RoomCount</p>
-<p>Post date: @Model.Announcement.PostDate</p>
-<p>Price per day: @Model.Announcement.PricePerDay</p>
-<p>Placement type:@Model.Announcement.PlacementType.PlacementTypeName</p>
-
-<p>Facilities:</p>
-<ul class="list-group">
-    @foreach (var facility in Model.Announcement.Facilities)
-    {
-        <li class="list-group-item">@facility.FacilityName</li>
-    }
-</ul>
-
-<p>
-    Owner:
-    <a asp-controller="User" asp-action="UserProfile" asp-route-id="@Model.Announcement.User.Id">
-        @Model.Announcement.User.Username
-    </a>
-</p>
-
-<br/>
-
 @{
     var request = ViewContext.HttpContext.Request;
     var returnUrl = request.Path + request.QueryString.ToUriComponent();
 }
 
-@if (User.Identity.IsAuthenticated)
+@if (Model.Announcement.Id != null)
 {
-    <a asp-controller="Announcement" asp-action="ReservationCreating" asp-route-id="@Model.Announcement.Id">Book</a>
-}
+    <h1>@Model.Announcement.Title</h1>
 
-<p>Write comment</p>
-@if (User.Identity.IsAuthenticated)
-{
-    <form asp-action="PostReview" asp-controller="Announcement"
-          asp-route-returnUrl="@returnUrl" asp-route-id="@Model.Announcement.Id">
-        <label asp-for="Comment">Comment</label><br/>
-        <input asp-for="Comment"/>
-        <span asp-validation-for="Comment"></span>
+    @if (User.Identity.IsAuthenticated &&
+         (new UserController().GetIdFromEmail(User.Identity.Name) == Model.Announcement.User.Id ||
+          new UserController().GetRole(User.Identity.Name) == "admin"))
+    {
+        <a asp-controller="Announcement" asp-action="DeleteAnnouncement" asp-route-id="@Model.Announcement.Id">
+            Delete
+        </a>
+    }
 
-        <label asp-for="Rating">Rating</label><br/>
-        <input asp-for="Rating"/>
-        <span asp-validation-for="Rating"></span>
+    <p>@Model.Announcement.Id</p>
+    <p>Address: @Model.Announcement.Address</p>
+    <p>Room count: @Model.Announcement.RoomCount</p>
+    <p>Post date: @Model.Announcement.PostDate</p>
+    <p>Price per day: @Model.Announcement.PricePerDay</p>
+    <p>Placement type:@Model.Announcement.PlacementType.PlacementTypeName</p>
 
-        <button type="submit">Post</button>
-    </form>
+    <p>Facilities:</p>
+    <ul class="list-group">
+        @foreach (var facility in Model.Announcement.Facilities)
+        {
+            <li class="list-group-item">@facility.FacilityName</li>
+        }
+    </ul>
+
+    <p>
+        Owner:
+        <a asp-controller="User" asp-action="UserProfile" asp-route-id="@Model.Announcement.User.Id">
+            @Model.Announcement.User.Username
+        </a>
+    </p>
+
+    <br/>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a asp-controller="Announcement" asp-action="ReservationCreating" asp-route-id="@Model.Announcement.Id">Book</a>
+    }
+
+    <p>Write comment</p>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form asp-action="PostReview" asp-controller="Announcement"
+              asp-route-returnUrl="@returnUrl" asp-route-id="@Model.Announcement.Id">
+            <label asp-for="Comment">Comment</label><br/>
+            <input asp-for="Comment"/>
+            <span asp-validation-for="Comment"></span>
+
+            <label asp-for="Rating">Rating</label><br/>
+            <input asp-for="Rating"/>
+            <span asp-validation-for="Rating"></span>
+
+            <button type="submit">Post</button>
+        </form>
+    }
+    else
+    {
+        <a asp-controller="User" asp-action="Login">Login</a>
+    }
+
+    @foreach (var review in Model.Announcement.Reviews)
+    {
+        <hr>
+        <a asp-controller="User" asp-action="UserProfile" asp-route-id="@review.User.Id">
+            <h3>@review.User.Username</h3>
+        </a>
+        if (User.Identity.IsAuthenticated &&
+            (new UserController().GetIdFromEmail(User.Identity.Name) == review.User.Id ||
+             new UserController().GetRole(User.Identity.Name) == "admin"))
+        {
+            <div class="container">
+                <a asp-controller="Announcement" asp-action="DeleteReview" asp-route-id="@review.Id" asp-route-returnUrl="@returnUrl">
+                    Delete
+                </a>
+                <a asp-controller="Announcement" asp-action="EditComment" asp-route-id="@review.Id">
+                    Edit
+                </a>
+            </div>
+        }
+        <p>@review.Rating</p>
+        <p>@review.Comment</p>
+        <hr>
+    }
 }
 else
 {
-    <a asp-controller="User" asp-action="Login">Login</a>
-}
-
-@foreach (var review in Model.Announcement.Reviews)
-{
-    <hr>
-    <a asp-controller="User" asp-action="UserProfile" asp-route-id="@review.User.Id">
-        <h3>@review.User.Username</h3>
-    </a>
-    if (User.Identity.IsAuthenticated &&
-        (new UserController().GetIdFromEmail(User.Identity.Name) == review.User.Id ||
-         new UserController().GetRole(User.Identity.Name) == "admin"))
-    {
-        <div class="container">
-            <a asp-controller="Announcement" asp-action="DeleteReview" asp-route-id="@review.Id" asp-route-returnUrl="@returnUrl">
-                Delete
-            </a>
-            <a asp-controller="Announcement" asp-action="EditComment" asp-route-id="@review.Id">
-                Edit
-            </a>
-        </div>
-    }
-    <p>@review.Rating</p>
-    <p>@review.Comment</p>
-    <hr>
+    <h1>DELETED</h1>
 }
